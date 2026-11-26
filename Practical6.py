@@ -1,0 +1,33 @@
+def main():
+    print("=" * 70)
+    print("  AI EXAM TIMETABLE GENERATOR")
+    print("  CSP + Backtracking + Consistency Checking")
+    print("=" * 70)
+
+    result = generate_exam_timetable()
+    print(f"\nSolution found : {result['success']}")
+    st = result["stats"]
+    print(f"Variables      : {st['variables']}")
+    print(f"Domain values  : {st['domains']}")
+    print(f"Tried          : {st['assignments_tried']}")
+    print(f"Backtracks     : {st['backtracks']}")
+    print(f"Checks         : {st['constraint_checks']}")
+
+    print("\nGENERATED EXAM TIMETABLE")
+    print("-" * 70)
+    print(f"{'Day':<12} {'Time':<14} {'Subject':<28} {'Room':<10} {'Group'}")
+    print("-" * 70)
+    for row in result["timetable"]:
+        print(f"{row['day']:<12} {row['time']:<14} {row['subject']:<28} {row['room']:<10} {row['group']}")
+
+    print("\n" + ("ALL CONSTRAINTS SATISFIED" if result["success"] else "NO SOLUTION"))
+    print("\nSample solving process (first 12 steps):")
+    for step in result["steps"][:12]:
+        mark = "OK" if step.get("ok") else "X"
+        print(f"  [{mark}] Step {step['step']}: {step['action']} {step.get('subject','')} -> {step.get('value','')}")
+        if step.get("reason") and not step.get("ok"):
+            print(f"       Reason: {step['reason']}")
+
+
+if __name__ == "__main__":
+    main()
